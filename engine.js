@@ -1,4 +1,4 @@
-var neshogi = {
+var engine = {
 	// Node Engine Shogi - By Bjorn D. Macintosh (2018)
 	// 20180308 - Starting new Shogi Engine
 	
@@ -11,18 +11,18 @@ var neshogi = {
 		} else {
 			handicap = 0;
 		}
-		if (is_NaN(handicap)) {
+		if (isNaN(handicap)) {
 			return {result: false, error: 'handicap was not a number'};
 		}
 		this.handicap = handicap;
 		
 		// new Board
-		this.board = new board();
+		this.board = Object.assign({}, board);
 		
 		// handicap is applied to the white
 		this.pieces = {
-			white: new pieces(),
-			black: new pieces()
+			white: Object.assign({}, pieces),
+			black: Object.assign({}, pieces)
 		};
 		
 		this.placePieces();
@@ -145,9 +145,9 @@ var neshogi = {
 					for (var i = 0; i < this.pieces.white.pawn.length; i++) {
 						delete this.pieces.white.pawn[i];
 					}
-					this.pieces.white.hand.push(new pawn());
-					this.pieces.white.hand.push(new pawn());
-					this.pieces.white.hand.push(new pawn());
+					this.pieces.white.hand.push(Object.assign({}, pawn));
+					this.pieces.white.hand.push(Object.assign({}, pawn));
+					this.pieces.white.hand.push(Object.assign({}, pawn));
 				break;
 				case 15:
 					// Naked King	裸玉	hadaka gyoku	all pieces except king
@@ -177,37 +177,63 @@ var neshogi = {
 	
 	placePieces() {
 		// Black king is position 77 (heaven? lol)
-		var tpb = this.pieces.black;
-		tpb.king[0].position = 77;
-		tpb.rook[0].position = 65;
-		tpb.bishop[0].position = 71;
-		tpb.gold[0].position = 76;
-		tpb.gold[1].position = 78;
-		tpb.silver[0].position = 75;
-		tpb.silver[1].position = 79;
-		tpb.knight[0].position = 74;
-		tpb.knight[1].position = 80;
-		tpb.lance[0].position = 73;
-		tpb.lance[1].position = 81;
-		for (var i = 0; i < tpb.pawn.length; i++) {
-			tpb.pawn[i].position = 55 + i;
+		this.board[77] = this.pieces.black.king[0];
+		this.pieces.black.king[0].position = 77;
+		this.board[65] = this.pieces.black.rook[0];
+		this.pieces.black.rook[0].position = 65;
+		this.board[71] = this.pieces.black.bishop[0];
+		this.pieces.black.bishop[0].position = 71;
+		this.board[76] = this.pieces.black.gold[0];
+		this.pieces.black.gold[0].position = 76;
+		this.board[78] = this.pieces.black.gold[1];
+		this.pieces.black.gold[1].position = 78;
+		this.board[75] = this.pieces.black.silver[0];
+		this.pieces.black.silver[0].position = 75;
+		this.board[79] = this.pieces.black.silver[1];
+		this.pieces.black.silver[1].position = 79;
+		this.board[74] = this.pieces.black.knight[0];
+		this.pieces.black.knight[0].position = 74;
+		this.board[80] = this.pieces.black.knight[1];
+		this.pieces.black.knight[1].position = 80;
+		this.board[73] = this.pieces.black.lance[0];
+		this.pieces.black.lance[0].position = 73;
+		this.board[81] = this.pieces.black.lance[1];
+		this.pieces.black.lance[1].position = 81;
+		for (var i = 0; i < this.pieces.black.pawn.length; i++) {
+			this.board[55 + i] = this.pieces.black.pawn[i];
+			this.pieces.black.pawn[i].position = 55 + i;
 		}
 
-		var tpw = this.pieces.white;
-		tpw.king[0].position = 5;
-		tpw.rook[0].position = 17;
-		tpw.bishop[0].position = 11;
-		tpw.gold[0].position = 4;
-		tpw.gold[1].position = 6;
-		tpw.silver[0].position = 3;
-		tpw.silver[1].position = 7;
-		tpw.knight[0].position = 2;
-		tpw.knight[1].position = 8;
-		tpw.lance[0].position = 1;
-		tpw.lance[1].position = 9;
-		for (var i = 0; i < tpw.pawn.length; i++) {
-			tpw.pawn[i].position = 19 + i;
+		this.board[5] = this.pieces.white.king[0];
+		this.pieces.white.king[0].position = 5;
+		this.board[17] = this.pieces.white.rook[0];
+		this.pieces.white.rook[0].position = 17;
+		this.board[11] = this.pieces.white.bishop[0];
+		this.pieces.white.bishop[0].position = 11;
+		this.board[4] = this.pieces.white.gold[0];
+		this.pieces.white.gold[0].position = 4;
+		this.board[6] = this.pieces.white.gold[1];
+		this.pieces.white.gold[1].position = 6;
+		this.board[3] = this.pieces.white.silver[0];
+		this.pieces.white.silver[0].position = 3;
+		this.board[7] = this.pieces.white.silver[1];
+		this.pieces.white.silver[1].position = 7;
+		this.board[2] = this.pieces.white.knight[0];
+		this.pieces.white.knight[0].position = 2;
+		this.board[8] = this.pieces.white.knight[1];
+		this.pieces.white.knight[1].position = 8;
+		this.board[1] = this.pieces.white.lance[0];
+		this.pieces.white.lance[0].position = 1;
+		this.board[9] = this.pieces.white.lance[1];
+		this.pieces.white.lance[1].position = 9;
+		for (var i = 0; i < this.pieces.white.pawn.length; i++) {
+			this.board[19 + i] = this.pieces.white.pawn[i];
+			this.pieces.white.pawn[i].position = 19 + i;
 		}
+	},
+	
+	readBoard() {
+		return this.board;
 	}
 };
 
@@ -235,30 +261,7 @@ var board = {
 	}
 }
 
-var pieces = {
-	king:	[new king()],
-	rook:	[new rook()],
-	bishop:	[new bishop()],
-	gold:	[new gold(), new gold()],
-	silver:	[new silveR(), new silver()],
-	knight:	[new knight(), new knight()],
-	lance:	[new lance(), new lance()],
-	pawn:	[
-		new pawn(),
-		new pawn(),
-		new pawn(),
-		new pawn(),
-		new pawn(),
-		new pawn(),
-		new pawn(),
-		new pawn(),
-		new pawn()
-	],
-	hand: [
-		// This is where I will store 'pieces in hand'
-	]
-}
-
+// Piece and Pieces
 var king = {
 	name: 'King',
 	position: -1,
@@ -298,4 +301,34 @@ var pawn = {
 	name: 'Pawn',
 	position: -1,
 	promoted:	false
+}
+
+var pieces = {
+	king:	[Object.assign({}, king)],
+	rook:	[Object.assign({}, rook)],
+	bishop:	[Object.assign({}, bishop)],
+	gold:	[Object.assign({}, gold), Object.assign({}, gold)],
+	silver:	[Object.assign({}, silver), Object.assign({}, silver)],
+	knight:	[Object.assign({}, knight), Object.assign({}, knight)],
+	lance:	[Object.assign({}, lance), Object.assign({}, lance)],
+	pawn:	[
+		Object.assign({}, pawn),
+		Object.assign({}, pawn),
+		Object.assign({}, pawn),
+		Object.assign({}, pawn),
+		Object.assign({}, pawn),
+		Object.assign({}, pawn),
+		Object.assign({}, pawn),
+		Object.assign({}, pawn),
+		Object.assign({}, pawn)
+	],
+	hand: [
+		// This is where I will store 'pieces in hand'
+	]
+}
+
+console.log(pieces);
+
+module.exports = {
+	neshogi: engine
 }

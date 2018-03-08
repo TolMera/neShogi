@@ -14,6 +14,8 @@ app.all('/', (req, res) => {
 		To place a piece, access '/place/$game/$piece/$square'
 		To make Engine Move, access '/engine/$game'
 		To undo a move, access '/undo/$game'
+		
+		To read the board, access '/read/$game'
 		Games end automatically when Checkmate occurs, or the game has become 'inactive'
 		
 		Good luck playing` + 
@@ -23,13 +25,23 @@ app.all('/', (req, res) => {
 
 app.all('/newGame*', (req, res) => {
 	var time = new Date().getTime();
-	games[time] = new neshogi();
-	game[time].create();
+	games[time] = Object.create(engine.neshogi);
+	games[time].create();
 	
 	console.log("New Game Started", Object.keys(games).length, "Current Games");
 	res.send(JSON.stringify({gameId: time}));
 });
 
+app.all('/read*', (req, res) => {
+	var bits = req.path.split('/');
+	console.log(Object.keys(games));
+	console.log(bits);
+	if (games[bits[2]] != undefined) {
+		var game = games[bits[2]];
+		return res.send(JSON.stringify(game.readBoard()));
+	}
+	return res.send(JSON.stringify({result: false, error: 'No Game with that ID'}));
+});
 
 app.all('/move*', (req, res) => {
 });
