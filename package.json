@@ -1,0 +1,28 @@
+{
+  "name": "neshogi",
+  "version": "0.0.0",
+  "description": "A portable shogi engine",
+  "main": "index.js",
+  "scripts": {
+    "test": "touch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TolMera/neShogi.git"
+  },
+  "keywords": [
+    "SHOGI",
+    "NODE",
+    "ENGINE",
+    "PORTABLE"
+  ],
+  "author": "Bjorn D. Macintosh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TolMera/neShogi/issues"
+  },
+  "homepage": "https://github.com/TolMera/neShogi#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
