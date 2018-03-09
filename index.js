@@ -55,9 +55,13 @@ app.all('/move*', (req, res) => {
 			var ret = game.board.move(bits[3], bits[4], bits[5]);
 			
 			if (ret.result == true) game.nextTurn();
+			if (ret.taken != undefined) {
+				// Player took opponent piece, put in hand
+				game.pieces[player].hand.push(ret.taken);
+			}
 			return res.send(JSON.stringify(ret));
 		} else {
-			return {result: false, error: 'It is ' + game.turn + '\'s turn'};
+			return res.send(JSON.stringify({result: false, error: 'It is ' + game.turn + '\'s turn'}));
 		}
 	}
 	return res.send(JSON.stringify({result: false, error: 'No Game with that ID'}));

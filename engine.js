@@ -270,9 +270,7 @@ var engine = {
 			}
 		}
 		
-		turn = 'black';
-		
-		console.log(this);
+		this.turn = 'black';
 		
 		return {result: true};
 	},
@@ -360,20 +358,20 @@ var board = {
 			return {result: false, error: 'Piece moved off board'};
 		}
 		
-		var piece = this.board.position[start];
-		if (this.board.position[end] != undefined) {
-			if (this.board.position[end].player != player) {
-				var taken = this.board.position[end];
+		var piece = this.position[start];
+		if (this.position[end] != undefined) {
+			if (this.position[end] != undefined && this.position[end].player != player) {
+				var taken = this.position[end];
 			} else {
 				return {result: false, error: 'Player attempted to take their own piece?'};
 			}
 		}
-		this.board.position[end] = piece;
+		this.position[end] = piece;
+		piece.position = end;
 		
 		// Only make changes to the piece when we are past error returns.
-		taken.player = player;
-		this.pieces[player].hand.push(taken); // Into player hand
-		delete(this.board.position[start]);
+		if (taken != undefined) taken.player = player;
+		delete(this.position[start]);
 
 		// Add the move to the history, so we can rewind - replay - product move sheet
 		this.history.push([player, start, end]);
@@ -383,8 +381,8 @@ var board = {
 	},
 	
 	place(player, position, piece) {
-		if (this.board.position[position] == undefined) {
-			this.board.position[position] = piece;
+		if (this.position[position] == undefined) {
+			this.position[position] = piece;
 			piece.position = position;
 			 
 			// Add drop to history
