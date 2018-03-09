@@ -10,7 +10,7 @@ app.all('/', (req, res) => {
 		Your input will be echoed below for testing purposes
 		neshogi is an engine with API interface accessed via HTTP
 		To start a game against the engine, access '/newGame/$handicapLevel[0-16]'
-		To make a move, access '/move/$game/$startSquare/$endSquare'
+		To make a move, access '/move/$game/$player/$startSquare/$endSquare'
 		To place a piece, access '/place/$game/$piece/$square'
 		To make Engine Move, access '/engine/$game'
 		To undo a move, access '/undo/$game'
@@ -34,8 +34,7 @@ app.all('/newGame*', (req, res) => {
 
 app.all('/read*', (req, res) => {
 	var bits = req.path.split('/');
-	console.log(Object.keys(games));
-	console.log(bits);
+
 	if (games[bits[2]] != undefined) {
 		var game = games[bits[2]];
 		return res.send(JSON.stringify(game.readBoard()));
@@ -44,6 +43,14 @@ app.all('/read*', (req, res) => {
 });
 
 app.all('/move*', (req, res) => {
+	var bits = req.path.split('/');
+
+	if (games[bits[2]] != undefined) {
+		var game = games[bits[2]];
+		var ret = game.board.move(bits[3], bits[4], bits[5]);
+		return res.send(JSON.stringify(ret));
+	}
+	return res.send(JSON.stringify({result: false, error: 'No Game with that ID'}));
 });
 
 app.all('/undo*', (req, res) => {

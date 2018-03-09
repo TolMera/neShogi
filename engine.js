@@ -21,8 +21,8 @@ var engine = {
 		
 		// handicap is applied to the white
 		this.pieces = {
-			white: Object.assign({}, pieces),
-			black: Object.assign({}, pieces)
+			white: Object.assign({player: 'white'}, pieces),
+			black: Object.assign({player: 'black'}, pieces)
 		};
 		
 		this.placePieces();
@@ -173,9 +173,11 @@ var engine = {
 				break;
 			}
 		}
+		console.log(this);
 	},
 	
 	placePieces() {
+		this.pieces.black.create(this.player);
 		// Black king is position 77 (heaven? lol)
 		this.board[77] = this.pieces.black.king[0];
 		this.pieces.black.king[0].position = 77;
@@ -204,6 +206,7 @@ var engine = {
 			this.pieces.black.pawn[i].position = 55 + i;
 		}
 
+		this.pieces.white.create(this.player);
 		this.board[5] = this.pieces.white.king[0];
 		this.pieces.white.king[0].position = 5;
 		this.board[17] = this.pieces.white.rook[0];
@@ -239,13 +242,25 @@ var engine = {
 
 var board = {
 	// piece	(origin)	movement	destination	(promotion)
-	move(start, end) {
+	move(player, start, end) {
+		if (start < 1 || start > 81 || end < 1 || end > 81) {
+			return {result: false, error: 'Piece moved off board'};
+		}
+		
 		var piece = this.board[start];
-		delete(this.board[start]);
 		if (this.board[end] != undefined) {
-			var taken = this.board[end];
+			if (this.board[end].player != player) {
+				var taken = this.board[end];
+			} else {
+				return {result: false, error: 'Player attempted to take their own piece?'};
+			}
 		}
 		this.board[end] = piece;
+		
+		// Only make changes to the piece when we are past error returns.
+		taken.player = player;
+		this.pieces[player].hand.push(taken); // Into player hand
+		delete(this.board[start]);
 		
 		// Return the piece that was taken from the board.
 		return {result: true, taken: taken};
@@ -304,30 +319,30 @@ var pawn = {
 }
 
 var pieces = {
-	king:	[Object.assign({}, king)],
-	rook:	[Object.assign({}, rook)],
-	bishop:	[Object.assign({}, bishop)],
-	gold:	[Object.assign({}, gold), Object.assign({}, gold)],
-	silver:	[Object.assign({}, silver), Object.assign({}, silver)],
-	knight:	[Object.assign({}, knight), Object.assign({}, knight)],
-	lance:	[Object.assign({}, lance), Object.assign({}, lance)],
-	pawn:	[
-		Object.assign({}, pawn),
-		Object.assign({}, pawn),
-		Object.assign({}, pawn),
-		Object.assign({}, pawn),
-		Object.assign({}, pawn),
-		Object.assign({}, pawn),
-		Object.assign({}, pawn),
-		Object.assign({}, pawn),
-		Object.assign({}, pawn)
-	],
-	hand: [
-		// This is where I will store 'pieces in hand'
-	]
+	create(player) {
+		this.king =	[Object.assign({player: player}, king)],
+		this.rook =	[Object.assign({player: player}, rook)],
+		this.bishop =	[Object.assign({player: player}, bishop)],
+		this.gold =	[Object.assign({player: player}, gold), Object.assign({player: player}, gold)],
+		this.silver =	[Object.assign({player: player}, silver), Object.assign({player: player}, silver)],
+		this.knight =	[Object.assign({player: player}, knight), Object.assign({player: player}, knight)],
+		this.lance =	[Object.assign({player: player}, lance), Object.assign({player: player}, lance)],
+		this.pawn =	[
+			Object.assign({player: player}, pawn),
+			Object.assign({player: player}, pawn),
+			Object.assign({player: player}, pawn),
+			Object.assign({player: player}, pawn),
+			Object.assign({player: player}, pawn),
+			Object.assign({player: player}, pawn),
+			Object.assign({player: player}, pawn),
+			Object.assign({player: player}, pawn),
+			Object.assign({player: player}, pawn)
+		],
+		this.hand = [
+			// This is where I will store 'pieces in hand'
+		]
+	}
 }
-
-console.log(pieces);
 
 module.exports = {
 	neshogi: engine
