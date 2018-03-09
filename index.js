@@ -1,9 +1,20 @@
 const express = require('express')
 const app = express()
+const cors = require('cors');
 
 const engine = require('./engine.js');
 
 var games = {};
+
+
+app.use(cors());
+
+app.use(function(req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header('Access-Control-Allow-Methods', 'DELETE, PUT, GET, POST');
+   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+   next();
+});
 
 app.all('/', (req, res) => {
 	res.send(`
@@ -14,6 +25,7 @@ app.all('/', (req, res) => {
 		To place a piece, access '/place/$game/$player/$piece/$square'
 		To make Engine Move, access '/engine/$game'
 		To undo a move, access '/undo/$game'
+		To check whos turn it is, access '/turn/$game'
 		
 		To read the board, access '/read/$game'
 		Games end automatically when Checkmate occurs, or the game has become 'inactive'
@@ -87,6 +99,21 @@ app.all('/place*', (req, res) => {
 
 app.all('/undo*', (req, res) => {
 	
+});
+
+app.all('/turn*', (req, res) => {
+	var bits = req.path.split('/');
+	
+	if (games[bits[2]] != undefined) {
+		var game = games[bits[2]];
+		if (game == undefined) {
+			res.send(JSON.stringify({result: false, error: 'Game not found'}));
+		} else {
+			res.send(JSON.stringify({result: true, turn: game.turn}));
+		}
+	} else {
+		res.send(JSON.stringify({result: false, error: 'No Game ID provided'}));
+	}
 });
 
 app.listen(3000, () => console.log('Port 3000 open for connections'))
