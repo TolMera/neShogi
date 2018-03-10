@@ -400,24 +400,11 @@ var king = {
 	name: 'King',
 	position: -1,
 	promoted:	false
-	// ,
-	// legal:	[10, 9, 8, 1, -1, -8, -9, -10]
 }
 var rook = {
 	name: 'Rook',
 	position: -1,
 	promoted:	false
-	// ,
-	// legal: [
-	// 	// Moves vertical (up)
-	// 	9, 18, 27, 36, 45, 54, 63, 72, 81,
-	// 	// Moves vertical (down)
-	// 	-9, -18, -27, -36, -45, -54, -63, -72, -81,
-	// 	// Moves horizontal (left)
-	// 	-1, -2, -3, -4, -5, -6, -7, -8, -9,
-	// 	// Moves horizontal (right)
-	// 	1, 2, 3, 4, 5, 6, 7, 8, 9
-	// ]
 }
 var bishop = {
 	name: 'Bishop',
