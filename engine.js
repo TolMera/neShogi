@@ -270,61 +270,61 @@ function engine() {
 	this.placePieces = function() {
 		this.pieces.black.create.call(this.pieces.black, 'black');
 		// Black king is position 77 (heaven? lol)
-		this.board.position[76] = this.pieces.black.king[0];
-		this.pieces.black.king[0].position = 76;
-		this.board.position[64] = this.pieces.black.rook[0];
-		this.pieces.black.rook[0].position = 64;
-		this.board.position[70] = this.pieces.black.bishop[0];
-		this.pieces.black.bishop[0].position = 70;
-		this.board.position[75] = this.pieces.black.gold[0];
-		this.pieces.black.gold[0].position = 75;
-		this.board.position[77] = this.pieces.black.gold[1];
-		this.pieces.black.gold[1].position = 77;
-		this.board.position[74] = this.pieces.black.silver[0];
-		this.pieces.black.silver[0].position = 74;
-		this.board.position[78] = this.pieces.black.silver[1];
-		this.pieces.black.silver[1].position = 78;
-		this.board.position[73] = this.pieces.black.knight[0];
-		this.pieces.black.knight[0].position = 73;
-		this.board.position[79] = this.pieces.black.knight[1];
-		this.pieces.black.knight[1].position = 79;
-		this.board.position[72] = this.pieces.black.lance[0];
-		this.pieces.black.lance[0].position = 72;
-		this.board.position[80] = this.pieces.black.lance[1];
-		this.pieces.black.lance[1].position = 80;
+		this.board.position[77] = this.pieces.black.king[0];
+		this.pieces.black.king[0].position = 77;
+		this.board.position[71] = this.pieces.black.rook[0];
+		this.pieces.black.rook[0].position = 71;
+		this.board.position[65] = this.pieces.black.bishop[0];
+		this.pieces.black.bishop[0].position = 65;
+		this.board.position[76] = this.pieces.black.gold[0];
+		this.pieces.black.gold[0].position = 76;
+		this.board.position[78] = this.pieces.black.gold[1];
+		this.pieces.black.gold[1].position = 78;
+		this.board.position[75] = this.pieces.black.silver[0];
+		this.pieces.black.silver[0].position = 75;
+		this.board.position[79] = this.pieces.black.silver[1];
+		this.pieces.black.silver[1].position = 79;
+		this.board.position[74] = this.pieces.black.knight[0];
+		this.pieces.black.knight[0].position = 74;
+		this.board.position[80] = this.pieces.black.knight[1];
+		this.pieces.black.knight[1].position = 80;
+		this.board.position[73] = this.pieces.black.lance[0];
+		this.pieces.black.lance[0].position = 73;
+		this.board.position[81] = this.pieces.black.lance[1];
+		this.pieces.black.lance[1].position = 81;
 		for (var i = 0; i < this.pieces.black.pawn.length; i++) {
-			this.board.position[54 + i] = this.pieces.black.pawn[i];
-			this.pieces.black.pawn[i].position = 54 + i;
+			this.board.position[55 + i] = this.pieces.black.pawn[i];
+			this.pieces.black.pawn[i].position = 55 + i;
 		}
 
 		this.pieces.white.create.call(this.pieces.white, 'white');
-		this.board.position[4] = this.pieces.white.king[0];
-		this.pieces.white.king[0].position = 4;
-		this.board.position[16] = this.pieces.white.rook[0];
-		this.pieces.white.rook[0].position = 16;
-		this.board.position[10] = this.pieces.white.bishop[0];
-		this.pieces.white.bishop[0].position = 10;
-		this.board.position[3] = this.pieces.white.gold[0];
-		this.pieces.white.gold[0].position = 3;
-		this.board.position[5] = this.pieces.white.gold[1];
-		this.pieces.white.gold[1].position = 5;
-		this.board.position[2] = this.pieces.white.silver[0];
-		this.pieces.white.silver[0].position = 2;
-		this.board.position[6] = this.pieces.white.silver[1];
-		this.pieces.white.silver[1].position = 6;
-		this.board.position[1] = this.pieces.white.knight[0];
-		this.pieces.white.knight[0].position = 1;
-		this.board.position[7] = this.pieces.white.knight[1];
-		this.pieces.white.knight[1].position = 7;
-		this.board.position[0] = this.pieces.white.lance[0];
-		this.pieces.white.lance[0].position = 0;
-		this.board.position[8] = this.pieces.white.lance[1];
-		this.pieces.white.lance[1].position = 8;
+		this.board.position[5] = this.pieces.white.king[0];
+		this.pieces.white.king[0].position = 5;
+		this.board.position[11] = this.pieces.white.rook[0];
+		this.pieces.white.rook[0].position = 11;
+		this.board.position[17] = this.pieces.white.bishop[0];
+		this.pieces.white.bishop[0].position = 17;
+		this.board.position[4] = this.pieces.white.gold[0];
+		this.pieces.white.gold[0].position = 4;
+		this.board.position[6] = this.pieces.white.gold[1];
+		this.pieces.white.gold[1].position = 6;
+		this.board.position[3] = this.pieces.white.silver[0];
+		this.pieces.white.silver[0].position = 3;
+		this.board.position[7] = this.pieces.white.silver[1];
+		this.pieces.white.silver[1].position = 7;
+		this.board.position[2] = this.pieces.white.knight[0];
+		this.pieces.white.knight[0].position = 2;
+		this.board.position[8] = this.pieces.white.knight[1];
+		this.pieces.white.knight[1].position = 8;
+		this.board.position[1] = this.pieces.white.lance[0];
+		this.pieces.white.lance[0].position = 1;
+		this.board.position[9] = this.pieces.white.lance[1];
+		this.pieces.white.lance[1].position = 9;
 		for (var i = 0; i < this.pieces.white.pawn.length; i++) {
-			this.board.position[18 + i] = this.pieces.white.pawn[i];
-			this.pieces.white.pawn[i].position = 18 + i;
+			this.board.position[19 + i] = this.pieces.white.pawn[i];
+			this.pieces.white.pawn[i].position = 19 + i;
 		}
-	};
+	}
 	
 	this.readBoard = function() {
 		return this.board.position;
@@ -362,7 +362,7 @@ function board() {
 		
 		// Return the piece that was taken from the board.
 		return {result: true, taken: taken};
-	};
+	}
 	
 	this.place = function(player, position, piece) {
 		if (this.position[position] == undefined) {

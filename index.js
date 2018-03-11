@@ -82,7 +82,7 @@ app.all('/move*', (req, res) => {
 			if (ret.result == true) game.nextTurn.call(game);
 			if (ret.taken != undefined) {
 				// Player took opponent piece, put in hand
-				game.pieces[player].hand.push(ret.taken);
+				game.pieces[game.turn].hand.push(ret.taken);
 			}
 			return res.send(JSON.stringify(ret));
 		} else {
