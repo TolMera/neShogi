@@ -1,11 +1,14 @@
+/**
+ * BUG LIST:  When new engine.engin();  Board is not new object, it's a shared object...
+ */
 const express = require('express')
 const app = express()
 const cors = require('cors');
 
 const engine = require('./engine.js');
+const AI = require('./AI.js');
 
 var games = {};
-
 
 app.use(cors());
 
@@ -39,21 +42,29 @@ app.all('/newGame*', (req, res) => {
 	var bits = req.path.split('/');
 	
 	var time = new Date().getTime();
-	games[time] = Object.create(engine.neshogi);
+	while (games[time] != undefined) {
+		// Make sure it's unique
+		time--;
+	}
 	
-	var create = games[time].create(bits[2] || 0);
+	games[time] = new engine.engine();
+	var game = games[time];
+	var create = game.create.call(game, bits[2] || 0);
+	
 	if (create.result == false) delete games[time];
 	
 	console.log("New Game Started (handicap: " + (bits[2] || 0) + ")", Object.keys(games).length, "Current Games");
 	res.send(JSON.stringify({gameId: time}));
-});
+});	
 
 app.all('/read*', (req, res) => {
 	var bits = req.path.split('/');
 
 	if (games[bits[2]] != undefined) {
+		console.log(`Read on ${bits[2]}`);
+		
 		var game = games[bits[2]];
-		return res.send(JSON.stringify(game.readBoard()));
+		return res.send(JSON.stringify(game.readBoard.call(game)));
 	}
 	return res.send(JSON.stringify({result: false, error: 'No Game with that ID'}));
 });
@@ -63,10 +74,12 @@ app.all('/move*', (req, res) => {
 
 	if (games[bits[2]] != undefined) {
 		var game = games[bits[2]];
+		console.log(`Move on game ${bits[2]}`);
+		
 		if (game.turn == bits[3]) {
-			var ret = game.board.move(bits[3], bits[4], bits[5]);
+			var ret = game.board.move.call(game.board, bits[3], bits[4], bits[5]);
 			
-			if (ret.result == true) game.nextTurn();
+			if (ret.result == true) game.nextTurn.call(game);
 			if (ret.taken != undefined) {
 				// Player took opponent piece, put in hand
 				game.pieces[player].hand.push(ret.taken);
@@ -86,9 +99,9 @@ app.all('/place*', (req, res) => {
 	if (games[bits[2]] != undefined) {
 		var game = games[bits[2]];
 		if (game.turn == bits[3]) {
-			var ret = game.board.place(bits[3], bits[4], bits[5]);
+			var ret = game.board.place.call(game.board, bits[3], bits[4], bits[5]);
 			
-			if (ret.result == true) game.nextTurn();
+			if (ret.result == true) game.nextTurn.call(game);
 			return res.send(JSON.stringify(ret));
 		} else {
 			return {result: false, error: 'It is ' + game.turn + '\'s turn'};
@@ -110,6 +123,23 @@ app.all('/turn*', (req, res) => {
 			res.send(JSON.stringify({result: false, error: 'Game not found'}));
 		} else {
 			res.send(JSON.stringify({result: true, turn: game.turn}));
+		}
+	} else {
+		res.send(JSON.stringify({result: false, error: 'No Game ID provided'}));
+	}
+});
+
+app.all('/engine*', (req, res) => {
+	var bits = req.path.split('/');
+	
+	if (games[bits[2]] != undefined) {
+		var game = games[bits[2]];
+		if (game == undefined) {
+			res.send(JSON.stringify({result: false, error: 'Game not found'}));
+		} else {
+			// This is where the Engine AI needs to be attached, it will need to chose a move now...
+			var ret = AI.AI(game);
+			res.send(JSON.stringify(ret));
 		}
 	} else {
 		res.send(JSON.stringify({result: false, error: 'No Game ID provided'}));

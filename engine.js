@@ -1,11 +1,11 @@
-var engine = {
+function engine() {
 	// Node Engine Shogi - By Bjorn D. Macintosh (2018)
 	// 20180308 - Starting new Shogi Engine
 	
 	/**
 	 * Init the class.
 	 */
-	create(handicap) {
+	this.create = function(handicap) {
 		if (handicap != undefined) {
 			handicap = new Number(handicap);
 		} else {
@@ -17,42 +17,38 @@ var engine = {
 		this.handicap = handicap;
 		
 		// new Board
-		this.board = Object.assign({}, board);
+		this.board = new board();
 		
 		// handicap is applied to the white
 		this.pieces = {
-			white: Object.assign({player: 'white'}, pieces),
-			black: Object.assign({player: 'black'}, pieces)
+			white: new pieces(),
+			black: new pieces()
 		};
+		this.pieces.white.player = 'white';
+		this.pieces.black.player = 'black';
 		
 		this.placePieces();
 		
-		console.log(this.handicap);
 			
 		if (this.handicap == 0) {
-			console.log('handicap ' + 0);
 			// Black	先手	sente	no pieces omitted, but shitate always goes first
 		}
 		else if (this.handicap == 1) {
-			console.log('handicap ' + 1);
 			// Lance	香落ち	kyō ochi	left lance
 			this.board.position[this.pieces.white.lance[0].position] = undefined;
 			delete this.pieces.white.lance[0];
 		}
 		else if (this.handicap == 2) {
-			console.log('handicap ' + 2);
 			// Bishop	角落ち	kaku ochi	bishop
 			this.board.position[this.pieces.white.bishop[0].position] = undefined;
 			delete this.pieces.white.bishop[0];
 		}
 		else if (this.handicap == 3) {
-			console.log('handicap ' + 3);
 			// Rook	飛車落ち	hisha ochi	rook
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
 		}
 		else if (this.handicap == 4) {
-			console.log('handicap ' + 4);
 			// Rook–Lance	飛香落ち	hi-kyō ochi	rook, left lance
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -60,7 +56,6 @@ var engine = {
 			delete this.pieces.white.lance[0];
 		}
 		else if (this.handicap == 5) {
-			console.log('handicap ' + 5);
 			// 2-Piece	二枚落ち	ni-mai ochi	rook, bishop
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -68,7 +63,6 @@ var engine = {
 			delete this.pieces.white.bishop[0];
 		}
 		else if (this.handicap == 6) {
-			console.log('handicap ' + 6);
 			// 3-Piece	三枚落ち	san-mai ochi	rook, bishop, right lance
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -78,7 +72,6 @@ var engine = {
 			delete this.pieces.white.lance[1];
 		}
 		else if (this.handicap == 7) {
-			console.log('handicap ' + 7);
 			// 4-Piece	四枚落ち	yon-mai ochi	rook, bishop, both lances
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -90,7 +83,6 @@ var engine = {
 			delete this.pieces.white.lance[1];
 		}
 		else if (this.handicap == 8) {
-			console.log('handicap ' + 8);
 			// 5-Piece	五枚落ち	go-mai ochi	rook, bishop, both lances, either knight
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -104,7 +96,6 @@ var engine = {
 			delete this.pieces.white.knight[(new Date().getTime % 2)];
 		}
 		else if (this.handicap == 9) {
-			console.log('handicap ' + 9);
 			// 6-Piece	六枚落ち	roku-mai ochi	rook, bishop, both lances, both knights
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -120,7 +111,6 @@ var engine = {
 			delete this.pieces.white.knight[1];
 		}
 		else if (this.handicap == 10) {
-			console.log('handicap ' + 10);
 			// 7-Piece	七枚落ち	nana-mai ochi	rook, bishop, both lances, both knights, left silvers
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -138,7 +128,6 @@ var engine = {
 			delete this.pieces.white.silver[0];
 		}
 		else if (this.handicap == 11) {
-			console.log('handicap ' + 11);
 			// 8-Piece	八枚落ち	hachi-mai ochi	rook, bishop, both lances, both knights, both silvers
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -158,7 +147,6 @@ var engine = {
 			delete this.pieces.white.silver[1];
 		}
 		else if (this.handicap == 12) {
-			console.log('handicap ' + 12);
 			// 9-Piece	九枚落ち	kyū-mai ochi	rook, bishop, both lances, both knights, both silvers, left gold
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -180,7 +168,6 @@ var engine = {
 			delete this.pieces.white.gold[0];
 		}
 		else if (this.handicap == 13) {
-			console.log('handicap ' + 13);
 			// 10-Piece	十枚落ち	jū-mai ochi	rook, bishop, both lances, both knights, both silvers, both golds
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -204,7 +191,6 @@ var engine = {
 			delete this.pieces.white.gold[1];
 		}
 		else if (this.handicap == 14) {
-			console.log('handicap ' + 14);
 			// Three Pawns	歩三兵	fu sanbyō	all pieces except king and three pawns in hand
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -230,12 +216,11 @@ var engine = {
 				this.board.position[this.pieces.white.pawn[i].position] = undefined;
 				delete this.pieces.white.pawn[i];
 			}
-			this.pieces.white.hand.push(Object.assign({player: 'white'}, pawn));
-			this.pieces.white.hand.push(Object.assign({player: 'white'}, pawn));
-			this.pieces.white.hand.push(Object.assign({player: 'white'}, pawn));
+			this.pieces.white.hand.push(new pawn('white'));
+			this.pieces.white.hand.push(new pawn('white'));
+			this.pieces.white.hand.push(new pawn('white'));
 		}
 		else if (this.handicap == 15) {
-			console.log('handicap ' + 15);
 			// Naked King	裸玉	hadaka gyoku	all pieces except king
 			this.board.position[this.pieces.white.rook[0].position] = undefined;
 			delete this.pieces.white.rook[0];
@@ -273,17 +258,17 @@ var engine = {
 		this.turn = 'black';
 		
 		return {result: true};
-	},
+	};
 	
-	nextTurn() {
+	this.nextTurn = function() {
 		switch (this.turn) {
 			case 'white': this.turn = 'black'; break;
 			case 'black': this.turn = 'white'; break;
 		}
-	},
+	}
 	
-	placePieces() {
-		this.pieces.black.create('black');
+	this.placePieces = function() {
+		this.pieces.black.create.call(this.pieces.black, 'black');
 		// Black king is position 77 (heaven? lol)
 		this.board.position[76] = this.pieces.black.king[0];
 		this.pieces.black.king[0].position = 76;
@@ -312,7 +297,7 @@ var engine = {
 			this.pieces.black.pawn[i].position = 54 + i;
 		}
 
-		this.pieces.white.create('white');
+		this.pieces.white.create.call(this.pieces.white, 'white');
 		this.board.position[4] = this.pieces.white.king[0];
 		this.pieces.white.king[0].position = 4;
 		this.board.position[16] = this.pieces.white.rook[0];
@@ -339,21 +324,20 @@ var engine = {
 			this.board.position[18 + i] = this.pieces.white.pawn[i];
 			this.pieces.white.pawn[i].position = 18 + i;
 		}
-	},
+	};
 	
-	readBoard() {
+	this.readBoard = function() {
 		return this.board.position;
 	}
 };
 
-var board = {
-	
+function board() {
 	// move history
-	history: [],
-	position: {},
+	this.history = [];
+	this.position =  {};
 	
 	// piece	(origin)	movement	destination	(promotion)
-	move(player, start, end) {
+	this.move = function (player, start, end) {
 		if (start < 1 || start > 81 || end < 1 || end > 81) {
 			return {result: false, error: 'Piece moved off board'};
 		}
@@ -378,9 +362,9 @@ var board = {
 		
 		// Return the piece that was taken from the board.
 		return {result: true, taken: taken};
-	},
+	};
 	
-	place(player, position, piece) {
+	this.place = function(player, position, piece) {
 		if (this.position[position] == undefined) {
 			this.position[position] = piece;
 			piece.position = position;
@@ -396,66 +380,74 @@ var board = {
 }
 
 // Piece and Pieces
-var king = {
-	name: 'King',
-	position: -1,
-	promoted:	false
+var king = function(player) {
+	this.name =		'King',
+	this.position =	-1,
+	this.promoted =	false,
+	this.player = player
 }
-var rook = {
-	name: 'Rook',
-	position: -1,
-	promoted:	false
+var rook = function(player) {
+	this.name =		'Rook',
+	this.position =	-1,
+	this.promoted =	false,
+	this.player = player
 }
-var bishop = {
-	name: 'Bishop',
-	position: -1,
-	promoted:	false
+var bishop = function(player) {
+	this.name =		'Bishop',
+	this.position =	-1,
+	this.promoted =	false,
+	this.player = player
 }
-var gold = {
-	name: 'Gold',
-	position: -1,
-	promoted:	false
+var gold = function(player) {
+	this.name =		'Gold',
+	this.position =	-1,
+	this.promoted =	false,
+	this.player = player
 }
-var silver = {
-	name: 'Silver',
-	position: -1,
-	promoted:	false
+var silver = function(player) {
+	this.name =		'Silver',
+	this.position =	-1,
+	this.promoted =	false,
+	this.player = player
 }
-var knight = {
-	name: 'Knight',
-	position: -1,
-	promoted:	false
+var knight = function(player) {
+	this.name =		'Knight',
+	this.position =	-1,
+	this.promoted =	false,
+	this.player = player
 }
-var lance = {
-	name: 'Lance',
-	position: -1,
-	promoted:	false
+var lance = function(player) {
+	this.name =		'Lance',
+	this.position =	-1,
+	this.promoted =	false,
+	this.player = player
 }
-var pawn = {
-	name: 'Pawn',
-	position: -1,
-	promoted:	false
+var pawn = function(player) {
+	this.name =		'Pawn',
+	this.position =	-1,
+	this.promoted =	false,
+	this.player = player
 }
 
-var pieces = {
-	create(player) {
-		this.king =	[Object.assign({player: player}, king)];
-		this.rook =	[Object.assign({player: player}, rook)];
-		this.bishop =	[Object.assign({player: player}, bishop)];
-		this.gold =	[Object.assign({player: player}, gold), Object.assign({player: player}, gold)];
-		this.silver =	[Object.assign({player: player}, silver), Object.assign({player: player}, silver)];
-		this.knight =	[Object.assign({player: player}, knight), Object.assign({player: player}, knight)];
-		this.lance =	[Object.assign({player: player}, lance), Object.assign({player: player}, lance)];
+var pieces = function() {
+	this.create = function(player) {
+		this.king =		[new king(player)];
+		this.rook =		[new rook(player)];
+		this.bishop =	[new bishop(player)];
+		this.gold =		[new gold(player), new gold(player)];
+		this.silver =	[new silver(player), new silver(player)];
+		this.knight =	[new knight(player), new knight(player)];
+		this.lance =	[new lance(player), new lance(player)];
 		this.pawn =	[
-			Object.assign({player: player}, pawn),
-			Object.assign({player: player}, pawn),
-			Object.assign({player: player}, pawn),
-			Object.assign({player: player}, pawn),
-			Object.assign({player: player}, pawn),
-			Object.assign({player: player}, pawn),
-			Object.assign({player: player}, pawn),
-			Object.assign({player: player}, pawn),
-			Object.assign({player: player}, pawn)
+			new pawn(player),
+			new pawn(player),
+			new pawn(player),
+			new pawn(player),
+			new pawn(player),
+			new pawn(player),
+			new pawn(player),
+			new pawn(player),
+			new pawn(player)
 		];
 		this.hand = [
 			// This is where I will store 'pieces in hand'
@@ -464,5 +456,15 @@ var pieces = {
 }
 
 module.exports = {
-	neshogi: engine
+	engine: engine,
+	board: 	board,
+	pieces:	pieces,
+	king:	king,
+	rook:	rook,
+	bishop:	bishop,
+	gold:	gold,
+	silver:	silver,
+	knight:	knight,
+	lance:	lance,
+	pawn:	pawn
 }
