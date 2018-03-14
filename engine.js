@@ -343,6 +343,15 @@ function board() {
 		}
 		
 		var piece = this.position[start];
+		if (piece == undefined) {
+			return {result: false, error: 'There was no piece in that position?'};
+		}
+
+		// check this is a legal move
+		if (this.legal.move(piece, player, start, end) == false) {
+			return {result:	false, error: 'Player attemped an illegal move'};
+		}
+		// Check if a piece is being taken
 		if (this.position[end] != undefined) {
 			if (this.position[end] != undefined && this.position[end].player != player) {
 				var taken = this.position[end];
@@ -353,8 +362,7 @@ function board() {
 		this.position[end] = piece;
 		piece.position = end;
 		
-		// Only make changes to the piece when we are past error returns.
-		if (taken != undefined) taken.player = player;
+		// remove the piece from the board
 		delete(this.position[start]);
 
 		// Add the move to the history, so we can rewind - replay - product move sheet
@@ -375,6 +383,44 @@ function board() {
 			return {result: true};
 		} else {
 			return {result: false};
+		}
+	}
+
+	this.legal = {
+		move(piece, player, start, end) {
+			// simple
+			legal = {
+				king: [10, 9, 8, 1, -1, -8, -9, -10],
+				gold: [10, 9, 8, 1, -1, -9],
+				silver: [10, 9, 8, -8, -10],
+				knight: [19, 17],
+				lance: [9, 18, 27, 36, 45, 54, 63, 72, 81],
+				pawn: [9],
+				// complex
+				rook: [
+					9, 18, 27, 36, 45, 54, 63, 72,
+					-9, -18, -27, -36, -45, -54, -63, -72,
+					1, 2, 3, 4, 5, 6, 7, 8,
+					-1, -2, -3, -4, -5, -6, -7, -8
+				],
+				bishop: [
+					10, 20, 30, 40, 50, 60, 70, 80,
+					-10, -20, -30, -40, -50, -60, -70, -80,
+					8, 16, 24, 32, 40, 48, 56, 66,
+					-8, -16, -24, -32, -40, -48, -56, -66
+				]
+			}
+
+			for (move of legal[piece.name.toLowerCase()]) {
+				if (player == 'white') {
+					if (start + move == end) return true;
+				} else if (player == 'black') {
+					if (start - move == end) return true;
+				} else {
+					console.log("Bug detected!");
+				}
+			}
+			return false;
 		}
 	}
 }

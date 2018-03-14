@@ -77,14 +77,40 @@ app.all('/move*', (req, res) => {
 		console.log(`Move on game ${bits[2]}`);
 		
 		if (game.turn == bits[3]) {
-			var ret = game.board.move.call(game.board, bits[3], bits[4], bits[5]);
-			
-			if (ret.result == true) game.nextTurn.call(game);
-			if (ret.taken != undefined) {
-				// Player took opponent piece, put in hand
-				game.pieces[game.turn].hand.push(ret.taken);
+			var move = game.board.move.call(game.board, bits[3], bits[4], bits[5]);
+			if (move.result == true) {
+				if (move.taken != undefined) {
+					// Save taken piece if exists
+					switch (game.turn) {
+						case 'white':
+							// game.pieces['white'].hand.push(new (move.taken.name.toLowerCase())());
+							game.pieces['black'][move.taken.name.toLowerCase()].forEach((item, index) => {
+								console.log(item, move.taken);
+								if (item.position == move.taken.position) {
+									// Is this the same object?
+									game.pieces['black'][move.taken.name.toLowerCase()].splice(index,1);
+								}
+							});
+						break;
+						case 'black':
+							// game.pieces['black'].hand.push(new (move.taken.name.toLowerCase())());
+							game.pieces['white'][move.taken.name.toLowerCase()].forEach((item, index) => {
+								console.log(item, move.taken);
+								if (item.position == move.taken.position) {
+									// Is this the same object?
+									game.pieces['white'][move.taken.name.toLowerCase()].splice(index,1);
+								}
+							});
+						break;
+						default:
+							console.log("Error removing piece from board");
+						break;
+					}
+				}
+				// Next players turn
+				game.nextTurn.call(game);
 			}
-			return res.send(JSON.stringify(ret));
+			return res.send(JSON.stringify(move));
 		} else {
 			return res.send(JSON.stringify({result: false, error: 'It is ' + game.turn + '\'s turn'}));
 		}
