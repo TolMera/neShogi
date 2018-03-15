@@ -21,7 +21,6 @@ function AI(game, loopCount = 0) {
 			} else {
 				index = Math.floor(Math.random() * game.pieces[game.turn][piece].length);
 			}
-			console.log(game.pieces[game.turn][piece], index);
 		} while (game.pieces[game.turn][piece][index] == undefined)
 		piece = game.pieces[game.turn][piece][index];
 
@@ -35,8 +34,9 @@ function AI(game, loopCount = 0) {
 		}
 	} while (game.board.position[end] != undefined && x++ < 10);
 	
-	if (x == 10) {
+	if (x = 11) {
 		console.log("Could not make a move within the execution limit");
+		return {result: false, error: 'Coult not make a move within the execution limit'};
 	}
 	
 	// Do the move

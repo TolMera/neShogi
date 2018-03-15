@@ -334,7 +334,30 @@ function engine() {
 function board() {
 	// move history
 	this.history = [];
-	this.position =  {};
+	this.position = {};
+
+	// simple
+	this.legal = {
+		king: [10, 9, 8, 1, -1, -8, -9, -10],
+		gold: [10, 9, 8, 1, -1, -9],
+		silver: [10, 9, 8, -8, -10],
+		knight: [19, 17],
+		lance: [9, 18, 27, 36, 45, 54, 63, 72, 81],
+		pawn: [9],
+		// complex
+		rook: [
+			9, 18, 27, 36, 45, 54, 63, 72,
+			-9, -18, -27, -36, -45, -54, -63, -72,
+			1, 2, 3, 4, 5, 6, 7, 8,
+			-1, -2, -3, -4, -5, -6, -7, -8
+		],
+		bishop: [
+			10, 20, 30, 40, 50, 60, 70, 80,
+			-10, -20, -30, -40, -50, -60, -70, -80,
+			8, 16, 24, 32, 40, 48, 56, 66,
+			-8, -16, -24, -32, -40, -48, -56, -66
+		]
+	}
 	
 	// piece	(origin)	movement	destination	(promotion)
 	this.move = function (player, start, end) {
@@ -348,7 +371,7 @@ function board() {
 		}
 
 		// check this is a legal move
-		if (this.legal.move(piece, player, start, end) == false) {
+		if (this.legalMove(piece, player, start, end) == false) {
 			return {result:	false, error: 'Player attemped an illegal move'};
 		}
 		// Check if a piece is being taken
@@ -386,42 +409,17 @@ function board() {
 		}
 	}
 
-	this.legal = {
-		move(piece, player, start, end) {
-			// simple
-			legal = {
-				king: [10, 9, 8, 1, -1, -8, -9, -10],
-				gold: [10, 9, 8, 1, -1, -9],
-				silver: [10, 9, 8, -8, -10],
-				knight: [19, 17],
-				lance: [9, 18, 27, 36, 45, 54, 63, 72, 81],
-				pawn: [9],
-				// complex
-				rook: [
-					9, 18, 27, 36, 45, 54, 63, 72,
-					-9, -18, -27, -36, -45, -54, -63, -72,
-					1, 2, 3, 4, 5, 6, 7, 8,
-					-1, -2, -3, -4, -5, -6, -7, -8
-				],
-				bishop: [
-					10, 20, 30, 40, 50, 60, 70, 80,
-					-10, -20, -30, -40, -50, -60, -70, -80,
-					8, 16, 24, 32, 40, 48, 56, 66,
-					-8, -16, -24, -32, -40, -48, -56, -66
-				]
+	this.legalMove = function(piece, player, start, end) {
+		for (move of this.legal[piece.name.toLowerCase()]) {
+			if (player == 'white') {
+				if (start + move == end) return true;
+			} else if (player == 'black') {
+				if (start - move == end) return true;
+			} else {
+				console.log("Bug detected!");
 			}
-
-			for (move of legal[piece.name.toLowerCase()]) {
-				if (player == 'white') {
-					if (start + move == end) return true;
-				} else if (player == 'black') {
-					if (start - move == end) return true;
-				} else {
-					console.log("Bug detected!");
-				}
-			}
-			return false;
 		}
+		return false;
 	}
 }
 
