@@ -358,6 +358,14 @@ function board() {
 			-8, -16, -24, -32, -40, -48, -56, -66
 		]
 	}
+	this.legal.silverP = this.legal.gold;
+	this.legal.knightP = this.legal.gold;
+	this.legal.lanceP = this.legal.gold;
+	this.legal.pawnP = this.legal.gold;
+	this.legal.rookP = this.legal.rook;
+	this.legal.rookP.push(10, 8, -8, -10);
+	this.legal.bishopP = this.legal.bishop;
+	this.legal.bishopP.psuh(-9, 9, -1, 1);
 	
 	// piece	(origin)	movement	destination	(promotion)
 	this.move = function (player, start, end) {
